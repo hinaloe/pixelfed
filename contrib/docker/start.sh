@@ -5,6 +5,7 @@ cp -r storage.skel/* storage/
 chown -R www-data:www-data storage/ bootstrap/
 
 # Refresh the environment
+composer dump-autoload -o
 php artisan storage:link
 php artisan horizon:assets
 php artisan route:cache

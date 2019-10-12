@@ -37,17 +37,26 @@ RUN apt-get update \
  && rm -rf /var/cache/apt \
  && docker-php-source delete
 
+RUN composer global require hirak/prestissimo
+
 ENV PATH="~/.composer/vendor/bin:./vendor/bin:${PATH}"
 
-COPY . /var/www/
-
 WORKDIR /var/www/
+
+COPY composer.json composer.lock artisan server.php /var/www/
+COPY storage /var/www/storage/
+COPY bootstrap /var/www/bootstrap/
+COPY contrib /var/www/contrib/
+COPY database /var/www/database/
+#COPY app/Console/Kernel.php /var/www/app/Console/
+
 RUN cp -r storage storage.skel \
  && cp contrib/docker/php.ini /usr/local/etc/php/conf.d/pixelfed.ini \
- && composer install --prefer-dist --no-interaction \
+ && composer install --prefer-dist --no-interaction --no-scripts \
  && rm -rf html && ln -s public html
 
-VOLUME /var/www/storage /var/www/bootstrap
+VOLUME /var/www/storage /var/www/bootstrap \
+        /var/www/config /var/www/public /var/www/resources /var/www/routes
 
 ENV APP_ENV=production \
     APP_DEBUG=false \
