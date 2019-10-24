@@ -8,9 +8,9 @@ chown -R www-data:www-data storage/ bootstrap/
 composer dump-autoload -o
 php artisan storage:link
 php artisan horizon:assets
-php artisan route:cache
-php artisan view:cache
-php artisan config:cache
+php artisan route:clear
+php artisan view:clear
+php artisan config:clear
 
 # Migrate database if the app was upgraded
 # gosu www-data:www-data php artisan migrate --force
